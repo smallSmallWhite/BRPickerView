@@ -115,13 +115,18 @@ typedef NS_ENUM(NSInteger, BRStringPickerMode) {
     } else {
         isDataSourceValid = NO;
     }
+    //解决数据源中出现字母情况时的崩溃问题
     // 判断数组是否合法（即数组的所有元素是否是同一种数据类型）
     if (isDataSourceValid) {
         Class itemClass = [[dataArr firstObject] class];
         for (id obj in dataArr) {
             if (![obj isKindOfClass:itemClass]) {
-                isDataSourceValid = NO;
-                break;
+                if (![obj isKindOfClass:NSClassFromString(@"NSTaggedPointerString")]) {
+                    
+                    isDataSourceValid = NO;
+                    break;
+                }
+                
             }
         }
     }
